@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb78c26333e954946a4f3b80da47ae45, type: 3}
+  m_Name: Toilet
+  m_EditorClassIdentifier: 
+  itemName: Toilet
+  itemDescription: Toilet
+  itemPrice: 125
+  itemPrefab: {fileID: 1988840589068096811, guid: 0b894d2ededeafd4cb441252cd80028a,
+    type: 3}
+  itemImage: {fileID: 21300000, guid: 0df0227bff535b649bd07d7f93e9864a, type: 3}
