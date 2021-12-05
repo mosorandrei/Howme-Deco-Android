@@ -24,6 +24,6 @@ public class UIContentFitter : MonoBehaviour
         float childWidth = transform.GetChild(0).GetComponent<RectTransform>().rect.width;
         float width = horizontalGroup.spacing * childCount + childWidth * childCount + horizontalGroup.padding.left;
 
-        GetComponent<RectTransform>().sizeDelta = new Vector2(width, 250);
+        GetComponent<RectTransform>().sizeDelta = new Vector2(width, 200);
     }
 }

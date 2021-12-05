@@ -16,7 +16,19 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 17611493123b76242b571cbbdf1023f4
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: d423d160e83e4c845bca80a770209cb0
+    m_Address: Assets/AddressableAssets/Items/Couch.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Furniture
+    - Living Room
+  - m_GUID: ac7366a2c40dc4640a1c930f68103412
+    m_Address: Assets/AddressableAssets/Items/Fridge.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Furniture
+    - Kitchen
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 3b888449fd642ec4696c5d315b49450a, type: 2}
   m_SchemaSet:
