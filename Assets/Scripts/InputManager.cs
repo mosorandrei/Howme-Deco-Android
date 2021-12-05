@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
+using UnityEngine.XR.Interaction.Toolkit.AR;
 
-public class InputManager : MonoBehaviour
+public class InputManager : ARBaseGestureInteractable
+
 {
     [SerializeField] private Camera arCam;
     [SerializeField] private ARRaycastManager raycastManager;
     [SerializeField]private GameObject crosshair;
 
     List<ARRaycastHit> hits = new List<ARRaycastHit>();
+
     private Touch touch;
     private Pose pose;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,26 +25,41 @@ public class InputManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         CrosshairCalculation();
+    }
 
-        touch = Input.GetTouch(0);
+    protected override bool CanStartManipulationForGesture(TapGesture gesture)
+    {
+        if(gesture.targetObject == null)
+        {
+            return true;
+        }
+        return false;
+    }
 
-        if(Input.touchCount<0 || touch.phase!=TouchPhase.Began)
+    protected override void OnEndManipulation(TapGesture gesture)
+    {
+        if (gesture.isCanceled || (gesture.targetObject != null && IsPointerOverUI(gesture)))
         {
             return;
         }
 
-        if (IsPointerOverUI(touch)) return;
-
-        Instantiate(DataHandler.Instance.GetFurniture(), pose.position, pose.rotation);
+        if (GestureTransformationUtility.Raycast(gesture.startPosition, hits, arSessionOrigin, TrackableType.PlaneWithinPolygon))
+        {
+            GameObject placedObject = Instantiate(DataHandler.Instance.GetFurniture(), pose.position, pose.rotation);
+            var anchorObject = new GameObject("PlacementAnchor");
+            anchorObject.transform.position = pose.position;
+            anchorObject.transform.rotation = pose.rotation;
+            placedObject.transform.parent = anchorObject.transform;
+        }
     }
 
-    bool IsPointerOverUI(Touch touch)
+    bool IsPointerOverUI(TapGesture touch)
     {
         PointerEventData eventData = new PointerEventData(EventSystem.current);
-        eventData.position = new Vector2(touch.position.x, touch.position.y);
+        eventData.position = new Vector2(touch.startPosition.x, touch.startPosition.y);
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData,results);
         return results.Count > 0;
@@ -48,16 +68,12 @@ public class InputManager : MonoBehaviour
     void CrosshairCalculation()
     {
         Vector3 origin = arCam.ViewportToScreenPoint(new Vector3(0.5f, 0.5f, 0));
-        if (Input.GetMouseButtonDown(0))
+
+        if (GestureTransformationUtility.Raycast(origin, hits, arSessionOrigin, TrackableType.PlaneWithinPolygon))
         {
-            Ray ray = arCam.ScreenPointToRay(origin);
-            if (raycastManager.Raycast(ray, hits))
-            {
-                pose = hits[0].pose;
-                crosshair.transform.position = pose.position;
-                crosshair.transform.eulerAngles = new Vector3(90, 0, 0);
-            }
-;
+            pose = hits[0].pose;
+            crosshair.transform.position = pose.position;
+            crosshair.transform.eulerAngles = new Vector3(90, 0, 0);
         }
     }
 }

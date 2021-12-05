@@ -27,6 +27,7 @@ public class DataHandler : MonoBehaviour
         }
     }
 
+
     private async void Start()
     {
         items = new List<Item>();
@@ -74,6 +75,7 @@ public class DataHandler : MonoBehaviour
         var locations = await Addressables.LoadResourceLocationsAsync(label).Task;
         foreach (var location in locations)
         {
+            print("[ADDRESSABLE] Loading asset!");
             var obj = await Addressables.LoadAssetAsync<Item>(location).Task;
             items.Add(obj);
         }
